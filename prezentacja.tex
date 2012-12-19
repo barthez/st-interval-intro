@@ -13,7 +13,7 @@
 
 \author[B. Bułat, K. Piekutowski]{Bartłomiej Bułat, Krzysztof Piekutowski}
 
-\date[2012]{27.11.2012}
+\date[2012]{19.12.2012}
 
 \institute[AGH]
 {Wydział EAIiIB\\ 
@@ -37,7 +37,7 @@ Katedra Automatyki
 
   \begin{itemize}
     \item Choroba niedokrwienna serca (Zawał)
-    \item Miazdżyca
+    \item Miażdżyca
     \item Choroba wieńcowa
   \end{itemize}
 
@@ -47,8 +47,8 @@ Katedra Automatyki
   \frametitle{Założenia modułu}
   \begin{itemize}
     \item Wykryte punkty EKG: $ORS_{onset}$ ($ISO$), $ORS_{end}$
-      ($J$), $T_{end}$.
-    \item Zapis EKG z usuniętym falowaniem lini izoelektrycznej
+      ($J$), $T_{end}$
+    \item Zapis EKG z usuniętym falowaniem linii izoelektrycznej
     \item Sklasyfikowane zespoły QRS (Analizowane są tylko zespoły
       przedkomorowe)
     \item Obliczone i przepróbkowane HR
@@ -58,7 +58,7 @@ Katedra Automatyki
 \begin{frame}
   \frametitle{Algorytm, krok 1: Wykrycie punktu $T_{peak}$}
 
-  Punkt $T_{peak}$ znajduje się pomiedzy punktem $J$, punktem $T_{end}$.
+  Punkt $T_{peak}$ znajduje się pomiędzy punktem $J$, punktem $T_{end}$.
 
   
 
@@ -72,11 +72,11 @@ Katedra Automatyki
 \begin{frame}
   \frametitle{Algorytm, krok 2: Wykrycie punkty $T_{onset}$ ($ST_{end}$)}
 
-  Punkt $T_{onset}$ znajduje się pomiedzy punktem $J20$ (znajdującym sie $20ms$
+  Punkt $T_{onset}$ znajduje się pomiędzy punktem $J20$ (znajdującym się $20ms$
   za punktem $J$), a punktem $T_{peak}$.
 
-  Aby znaleźć ten punkt należy wyznaczyć prostę łączącą punkty $J20$ i
-  $T_{peak}$. Punkt $P_{onset}$ znajduje się w miejscy największej różnicy
+  Aby znaleźć ten punkt należy wyznaczyć prostą łączącą punkty $J20$ i
+  $T_{peak}$. Punkt $P_{onset}$ znajduje się w miejscu największej różnicy
   miedzy wyznaczoną prostą, a sygnałem.
 
 \end{frame}
@@ -87,8 +87,8 @@ Katedra Automatyki
   Przesunięcie nie jest mierzone żadną wartością, a jedynie określane, jako
   \emph{Wyższe}, \emph{Niższe} lub \emph{Normalne}.
 
-  Przesunięcie odcinka ST (wg. algorytmu $J+X$) to rózniaca miedzy wartością
-  sygnału w punkckie $JX$, a wartością w punkcje $ISO$:
+  Przesunięcie odcinka ST (wg. algorytmu $J+X$) to różnica między wartością
+  sygnału w punkcie $JX$, a wartością w punkcje $ISO$:
 
   \begin{center}
   \begin{math}
@@ -96,7 +96,7 @@ Katedra Automatyki
   \end{math}
   \end{center}
 
-  Gdzie $X$ nalezy do przedziału $60ms$ do $80ms$ i jest ściśle uzależnione 
+  Gdzie $X$ należy do przedziału $60ms$ do $80ms$ i jest ściśle uzależnione 
   od aktualnej wartości $HR$. Im większe $HR$ tym mniejsza wartość $X$.
 \end{frame}
 
@@ -104,22 +104,22 @@ Katedra Automatyki
   \frametitle{Algorytm, krok 4: typ odcinka ST}
 
   Aby wskazać czy odcinek ST jest prosty czy zakrzywiony należy wyznaczyć
-  prostą między punktem $J20$ a punktem $TE$. Punkt $TE$ to w zalezności od
+  prostą między punktem $J20$ a punktem $TE$. Punkt $TE$ to w zależności od
   przesunięcia odcinka ST, punkt $T_{peak}$ jeśli przesunięcie jest
   \emph{Wyższe}, lub punkt $T_{onset}$ jeśli przesunięcie jest \emph{Normalne}
   lub \emph{Niższe}.
 
-  Nastepnie szukana jest najwięsza odległośc miedzy wyznaczoną prostą, a
+  Następnie szukana jest największa odległość między wyznaczoną prostą, a
   sygnałem. Jeżeli ta odległość jest większa od założonego progu, to odcinek ST
-  jest zakrzywiony, jesli zaś mniejsza to odcinek jest prosty.
+  jest zakrzywiony, jeśli zaś mniejsza to odcinek jest prosty.
 \end{frame}
 
 \begin{frame}
   \frametitle{Algorytm, krok 5.1: zakrzywienie odcinka ST}
 
-  Aby określić kierunek wykrzywienia odcinka ST, nalezy policzyć stosunek
+  Aby określić kierunek wykrzywienia odcinka ST, należy policzyć stosunek
   liczny punktów sygnały na odcinku $J20$ do $TE$, które znajdują się pod i nad
-  prostę łaczacą te punkty do ilości wysztkich punktów na tym odcinku.
+  prostą łączącą te punkty do ilości wszystkich punktów na tym odcinku.
 
   Jeżeli stosunek ilości punktów nad prostą do ilości wszystkich punktów jest
   większy od $0.7$ odcinek ST się wznosi, jeżeli ponad $70\%$ punktów znajduje
@@ -136,11 +136,11 @@ Katedra Automatyki
   \frametitle{Algorytm, krok 5.2: nachylenie prostego odcinka ST}
   
   Obliczenie nachylenia prostego odcinka ST jest dużo łatwiejsze, ponieważ
-  wystarczy wykorzystać do tego nachylene prostej łączącej punkty $J20$ i $TE$.
+  wystarczy wykorzystać do tego nachylenie prostej łączącej punkty $J20$ i $TE$.
 
-  Nastepnie wartość tego nachylenia jest podawana ocenie. Jeśli jest większa od
-  zadanego progu, odcinek ST wznosi się, jeżeli mniejsza od przeciwnej wartości
-  progu: opada. Jeśli znajduje się pomiedzy tymi wartościami przyjmujemy, że
+  Następnie wartość tego nachylenia jest poddawana ocenie. Jeśli jest większa od
+  żądanego progu, odcinek ST wznosi się, jeżeli mniejsza od przeciwnej wartości
+  progu: opada. Jeśli znajduje się pomiędzy tymi wartościami przyjmujemy, że
   odcinek jest poziomy.
 \end{frame}
 
@@ -151,7 +151,7 @@ Katedra Automatyki
   Epizodami ST są zdarzenia polegające na utrzymaniu się parametrów ilościowych
   odcinka ST powyżej wartości progowych przez dłuższy czas.
 
-  Według definicji Polskiego Towarzystwa Kardiolicznego epizod ST to odcinek
+  Według definicji Polskiego Towarzystwa Kardiologicznego epizod ST to odcinek
   czasu o długości $60s$ odległy od poprzedniego o $30s$ w którym uniesienie
   ciągle przekracza $1mm$ i odcinek narasta lub uniesienie przekracza $2mm$
   ($1mV = 10mm$).

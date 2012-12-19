@@ -1,24 +1,31 @@
 \documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage{hyperref}
 
 \begin{document}
 \begin{center}
   Analiza odcina ST
 \end{center}
 
-\textbf{1. Medoty znajdowania odcinka ST}
+\textbf{1. Metody znajdowania odcinka ST}
 
- - Pomiedzy (pkt. J) $t_R+40ms$, a (pkt. ST) $t_R+60ms$, tylko w zespoła SV
+ - Pomiędzy (pkt. J) $t_R+40ms$, a (pkt. ST) $t_R+60ms$, tylko w zespołach SV
 
  - Dynamiczne $t_R+40ms+0,948\sqrt{t_{RR}}$, a $t_R+40ms+2,21\sqrt{t_{RR}}$
 
  Parametry algorytmu \emph{(statyczne/dynamiczne wyznaczanie ST = statyczne, minimalna
  długość epizodu = 60ms, minimalny odstęp miedzy epizodami = 30ms)}
 
- Dane wejsciowe: WAVES (położenie i typ zespołu QRS)
+ Dane wejściowe: WAVES (położenie i typ zespołu QRS)
 
 \textbf{Analiza odcinka ST}
 
-  - Nachylenie odcinka: tangens konta prostej przechodzącej przez punnkty J i
+  - Nachylenie odcinka: tangens konta prostej przechodzącej przez punkty J i
   ST
 
 \textbf{Prezentacja danych}
@@ -31,7 +38,7 @@
 
   Oba powyższe wykresy będą próbkowane niejednorodnie.
 
-  Dodatkowo zaznaczanie punktów J (poczatek odcinka ST) i punktu ST. Oraz
+  Dodatkowo zaznaczanie punktów J (początek odcinka ST) i punktu ST. Oraz
   Rysowanie odcinka ST na wykresie sygnału EKG.
 
   Epizody ST: Lista episodów wraz z parametrami (moment wystąpienia, czas,
