@@ -1,0 +1,173 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage{hyperref}
+
+\usetheme{AGH}
+
+\title[ST Interval]{Analiza odcinka ST}
+
+\author[B. Bułat, K. Piekutowski]{Bartłomiej Bułat, Krzysztof Piekutowski}
+
+\date[2012]{27.11.2012}
+
+\institute[AGH]
+{Wydział EAIiIB\\ 
+Katedra Automatyki
+}
+
+\setbeamertemplate{itemize item}{$\maltese$}
+
+\begin{document}
+
+{
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{titlepagepl}} % wersja polska
+ \begin{frame}
+   \titlepage
+ \end{frame}
+}
+
+
+\begin{frame}
+  \frametitle{Analiza odcina ST - po co?}
+
+  \begin{itemize}
+    \item Choroba niedokrwienna serca (Zawał)
+    \item Miazdżyca
+    \item Choroba wieńcowa
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Założenia modułu}
+  \begin{itemize}
+    \item Wykryte punkty EKG: $ORS_{onset}$ ($ISO$), $ORS_{end}$
+      ($J$), $T_{end}$.
+    \item Zapis EKG z usuniętym falowaniem lini izoelektrycznej
+    \item Sklasyfikowane zespoły QRS (Analizowane są tylko zespoły
+      przedkomorowe)
+    \item Obliczone i przepróbkowane HR
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorytm, krok 1: Wykrycie punktu $T_{peak}$}
+
+  Punkt $T_{peak}$ znajduje się pomiedzy punktem $J$, punktem $T_{end}$.
+
+  
+
+  Wyznaczenie punktu polega na przeprowadzeniu 5-warstwowej dekompozycji
+  falkowej splinów 4-stopnia, wyliczeniu punktu przejścia przez zero różnicy
+  pierwszego rzędu pary max-min. Ten punkt przejścia przez zero jest punktem
+  $T_{peak}$.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorytm, krok 2: Wykrycie punkty $T_{onset}$ ($ST_{end}$)}
+
+  Punkt $T_{onset}$ znajduje się pomiedzy punktem $J20$ (znajdującym sie $20ms$
+  za punktem $J$), a punktem $T_{peak}$.
+
+  Aby znaleźć ten punkt należy wyznaczyć prostę łączącą punkty $J20$ i
+  $T_{peak}$. Punkt $P_{onset}$ znajduje się w miejscy największej różnicy
+  miedzy wyznaczoną prostą, a sygnałem.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorytm, krok 3: przesunięcie odcinka ST}
+
+  Przesunięcie nie jest mierzone żadną wartością, a jedynie określane, jako
+  \emph{Wyższe}, \emph{Niższe} lub \emph{Normalne}.
+
+  Przesunięcie odcinka ST (wg. algorytmu $J+X$) to rózniaca miedzy wartością
+  sygnału w punkckie $JX$, a wartością w punkcje $ISO$:
+
+  \begin{center}
+  \begin{math}
+    offset = y(J+X) - y(ISO)
+  \end{math}
+  \end{center}
+
+  Gdzie $X$ nalezy do przedziału $60ms$ do $80ms$ i jest ściśle uzależnione 
+  od aktualnej wartości $HR$. Im większe $HR$ tym mniejsza wartość $X$.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorytm, krok 4: typ odcinka ST}
+
+  Aby wskazać czy odcinek ST jest prosty czy zakrzywiony należy wyznaczyć
+  prostą między punktem $J20$ a punktem $TE$. Punkt $TE$ to w zalezności od
+  przesunięcia odcinka ST, punkt $T_{peak}$ jeśli przesunięcie jest
+  \emph{Wyższe}, lub punkt $T_{onset}$ jeśli przesunięcie jest \emph{Normalne}
+  lub \emph{Niższe}.
+
+  Nastepnie szukana jest najwięsza odległośc miedzy wyznaczoną prostą, a
+  sygnałem. Jeżeli ta odległość jest większa od założonego progu, to odcinek ST
+  jest zakrzywiony, jesli zaś mniejsza to odcinek jest prosty.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorytm, krok 5.1: zakrzywienie odcinka ST}
+
+  Aby określić kierunek wykrzywienia odcinka ST, nalezy policzyć stosunek
+  liczny punktów sygnały na odcinku $J20$ do $TE$, które znajdują się pod i nad
+  prostę łaczacą te punkty do ilości wysztkich punktów na tym odcinku.
+
+  Jeżeli stosunek ilości punktów nad prostą do ilości wszystkich punktów jest
+  większy od $0.7$ odcinek ST się wznosi, jeżeli ponad $70\%$ punktów znajduje
+  się poniżej, odcinek ST opada. 
+  
+  Jeżeli żaden z tych wyznaczników nie przekroczył wartości $0.7$ należy
+  przybliżyć odcinek ST za pomocą krzywej (np. paraboli), ponieważ krzywa jest
+  zbyt zaszumiona.
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Algorytm, krok 5.2: nachylenie prostego odcinka ST}
+  
+  Obliczenie nachylenia prostego odcinka ST jest dużo łatwiejsze, ponieważ
+  wystarczy wykorzystać do tego nachylene prostej łączącej punkty $J20$ i $TE$.
+
+  Nastepnie wartość tego nachylenia jest podawana ocenie. Jeśli jest większa od
+  zadanego progu, odcinek ST wznosi się, jeżeli mniejsza od przeciwnej wartości
+  progu: opada. Jeśli znajduje się pomiedzy tymi wartościami przyjmujemy, że
+  odcinek jest poziomy.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorytm, krok 6: wykrywanie epizodów}
+
+
+  Epizodami ST są zdarzenia polegające na utrzymaniu się parametrów ilościowych
+  odcinka ST powyżej wartości progowych przez dłuższy czas.
+
+  Według definicji Polskiego Towarzystwa Kardiolicznego epizod ST to odcinek
+  czasu o długości $60s$ odległy od poprzedniego o $30s$ w którym uniesienie
+  ciągle przekracza $1mm$ i odcinek narasta lub uniesienie przekracza $2mm$
+  ($1mV = 10mm$).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bibliografia}
+
+  \begin{itemize}
+    \item \emph{An Algorithm of ST Segment Classification and Detection}, Zhao
+      Shen, Chao Hu, Jingsheng Liao, 2010, ICAL
+    \item \emph{Przetwarzanie sygnałów elektrodiagnostycznych}, Piotr
+      Augustyniak, 2001, AGH
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+
